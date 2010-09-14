@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'ruote'
 require 'ruote/storage/fs_storage'
+require 'activeresource'
 require 'lib/youre_bluffing'
 
+YoureBluffing::Models::Base.site = 'youre-bluffing.local'
 
 engine = Ruote::Engine.new(
   Ruote::Worker.new(
@@ -14,13 +16,13 @@ engine = Ruote::Engine.new(
   
 
 engine.register_participant :player do |work_item|
-  player = YoureBluffing::PlayerParticipant.new work_item
+  player = YoureBluffing::Participants::Player.new work_item
   player.send work_item.fields["params"]["task"].to_sym
   player.work_item
 end
 
 engine.register_participant :referee do |work_item|
-  referee = YoureBluffing::RefereeParticipant.new work_item
+  referee = YoureBluffing::Participants::Referee.new work_item
   referee.send work_item.fields["params"]["task"].to_sym
   referee.work_item
 end
