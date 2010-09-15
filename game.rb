@@ -1,10 +1,4 @@
-require 'rubygems'
-require 'ruote'
-require 'ruote/storage/fs_storage'
-require 'activeresource'
-require 'lib/youre_bluffing'
-
-YoureBluffing::Models::Base.site = 'youre-bluffing.local'
+require 'init'
 
 engine = Ruote::Engine.new(
   Ruote::Worker.new(
