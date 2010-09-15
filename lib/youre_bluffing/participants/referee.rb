@@ -5,10 +5,13 @@ module YoureBluffing::Participants
     ######### Main game flow
   
     def start_game
+      game.put(:start)
       log "Game started."
     end
   
     def pick_first_player
+      game.put(:next_player)
+      reload_game
       log "Player '#{current_player_name}' is first to start" 
     end
   

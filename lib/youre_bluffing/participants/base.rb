@@ -3,11 +3,20 @@ module YoureBluffing::Participants
     attr :work_item
   
     def initialize(work_item)
+      raise ArgumentError, "work item is missing game id" if work_item.fields['game_id'].blank? 
       @work_item = work_item
+    end
+    
+    def game
+      @game ||= YoureBluffing::Models::Game.find(work_item.fields['game_id'])
+    end
+    
+    def reload_game
+      @game = nil
     end
   
     def current_player_name 
-      "Johny Test"
+      game.try(:current_player).try(:name)
     end
   
     def current_card_on_deck
