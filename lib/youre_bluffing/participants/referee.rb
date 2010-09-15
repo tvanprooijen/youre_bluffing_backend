@@ -23,16 +23,16 @@ module YoureBluffing::Participants
       puts "referee: prepare action! -> (p)ass, (t)rade, (a)uction or (u)ndiceded ?"
       case gets[0,1]
         when 'p'
-          work_item.fields['action'] = YoureBluffing::Actions::PASS
+          work_item.fields['action'] = MainPlayerActions::PASS
           log "Player '#{current_player_name}' is passed cause there are no are no matching sets of cards to trade or cards in the deck to auction." 
         when 't'
-          work_item.fields['action'] = YoureBluffing::Actions::TRADE
+          work_item.fields['action'] = MainPlayerActions::TRADE
           log "Player '#{current_player_name}' has to trade, cause the deck is out of cards."
         when 'a'
-          work_item.fields['action'] = YoureBluffing::Actions::AUCTION
+          work_item.fields['action'] = MainPlayerActions::AUCTION
           log "Player '#{current_player_name}' has to auction, cause there are no matching sets of cards to trade."
         else 
-          work_item.fields['action'] = YoureBluffing::Actions::UNDICIDED
+          work_item.fields['action'] = MainPlayerActions::UNDICIDED
           log "Player '#{current_player_name}' can choose to trade or auction."
       end
     end

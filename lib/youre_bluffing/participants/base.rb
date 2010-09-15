@@ -1,5 +1,6 @@
 module YoureBluffing::Participants
   class Base
+    include YoureBluffing::Constants
     attr :work_item
   
     def initialize(work_item)

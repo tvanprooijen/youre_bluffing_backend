@@ -8,10 +8,10 @@ module YoureBluffing::Participants
       puts "player: choose_auction_or_trade! -> (t)rade or (a)uction?"
       case gets[0,1]
         when 't'
-          work_item.fields['action'] = YoureBluffing::Actions::TRADE
+          work_item.fields['action'] = MainPlayerActions::TRADE
           log "Player '#{current_player_name}' has chosen to trade"
         else
-          work_item.fields['action'] = YoureBluffing::Actions::AUCTION
+          work_item.fields['action'] = MainPlayerActions::AUCTION
           log "Player '#{current_player_name}' has chosen to auction"
       end
     end
