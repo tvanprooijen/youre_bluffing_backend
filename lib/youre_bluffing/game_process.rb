@@ -75,7 +75,7 @@ module YoureBluffing::GameProcess
     end
    
     define 'handle_error' do
-      error_logger    :msg        =>  "process ${wfid} is in error" 
+      error_logger
     end
      
   end
