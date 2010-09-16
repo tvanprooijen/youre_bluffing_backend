@@ -23,6 +23,7 @@ module YoureBluffing::GameProcess
     define 'auction' do
       referee         :task       =>  :start_auction
       referee         :task       =>  :flip_card_for_auction
+      referee         :task       =>  :distribute_money_on_donkey
       referee         :task       =>  :pick_first_player_for_bidding
                       
       cursor do       
