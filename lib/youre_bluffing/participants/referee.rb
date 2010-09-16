@@ -6,35 +6,46 @@ module YoureBluffing::Participants
   
     def start_game
       game.put(:start)
-      log "Game started."
+      log "Game started.", :public
     end
   
     def pick_first_player
       game.put(:next_player)
       reload_game
-      log "Player '#{current_player_name}' is first to start" 
+      log "Player '#{current_player_name}' is first to start", :public 
+    end
+    
+    def pick_next_player
+      game.put(:next_player)
+      reload_game
+      log "Player '#{current_player_name}' is next", :public
     end
   
     def calculate_scores
+      game.put(:calculate_scores)
       log "Scores calculated"
     end
   
     def prepare_action
-      puts "referee: prepare action! -> (p)ass, (t)rade, (a)uction or (u)ndiceded ?"
-      case gets[0,1]
-        when 'p'
-          work_item.fields['action'] = MainPlayerActions::PASS
-          log "Player '#{current_player_name}' is passed cause there are no are no matching sets of cards to trade or cards in the deck to auction." 
-        when 't'
-          work_item.fields['action'] = MainPlayerActions::TRADE
-          log "Player '#{current_player_name}' has to trade, cause the deck is out of cards."
-        when 'a'
-          work_item.fields['action'] = MainPlayerActions::AUCTION
-          log "Player '#{current_player_name}' has to auction, cause there are no matching sets of cards to trade."
-        else 
-          work_item.fields['action'] = MainPlayerActions::UNDICIDED
-          log "Player '#{current_player_name}' can choose to trade or auction."
+      can_trade = !game.deck.empty?
+      type_of_cards_on_table = other_players.collect{|p|p.cards.collect{|c|c.type}}.flatten.uniq
+      can_auction = current_player.cards.detect{|c| type_of_cards_on_table.include? c.type}
+      
+      work_item.fields['action'] = case
+        when can_trade && can_auction then
+          MainPlayerActions::UNDICIDED
+          log "Player '#{current_player_name}', Please choose if You want to Auction or Trade?", :public
+        when can_trade then  
+          MainPlayerActions::TRADE
+          log "Player '#{current_player_name}', You have to Trade this Turn!", :public
+        when can_auction then
+          MainPlayerActions::AUCTION
+          log "Player '#{current_player_name}', You have to Auction this Turn!", :public
+        else
+          MainPlayerActions::PASS
+          log "Player '#{current_player_name}', You will be Passed this Turn!", :public
       end
+      
     end
   
     def check_for_winner
@@ -49,9 +60,6 @@ module YoureBluffing::Participants
       end
     end 
   
-    def pick_next_player
-      log "Player '#{current_player_name}' is next" 
-    end
   
     ############ AUCTIONING
   

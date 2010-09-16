@@ -16,9 +16,19 @@ module YoureBluffing::Participants
       @game = nil
     end
   
-    def current_player_name 
-      game.try(:current_player).try(:name)
+    def current_player 
+      game.try(:current_player)
     end
+  
+    def current_player_name 
+      current_player.try(:name)
+    end
+    
+    def other_players
+      # all players except current_player
+      game.players.reject{|p|p.id == current_player.id}
+    end
+    
   
     def current_card_on_deck
       "<Pig - 600>"
@@ -32,7 +42,8 @@ module YoureBluffing::Participants
       "MR. X"
     end
   
-    def log(text)
+    def log(text, access = :private)
+      # public logs will be shown to the players in the gui
       puts "[#{Time.now.strftime('%H:%m')} - #{self.class.name} ] #{text}"
     end
   
